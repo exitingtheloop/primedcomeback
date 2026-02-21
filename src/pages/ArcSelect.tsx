@@ -65,7 +65,7 @@ export default function ArcSelect() {
           <h1 className="font-heading text-5xl font-bold text-paper tracking-[0.04em] text-shadow-lg leading-[0.95]">
             ARC<br />MODE
           </h1>
-          <p className="text-paper/30 text-xs tracking-[0.25em] uppercase font-heading mt-2">
+          <p className="text-paper/35 text-xs tracking-[0.25em] uppercase font-heading font-semibold mt-2 label-clear">
             Choose your personalized arc
           </p>
         </div>
@@ -80,7 +80,7 @@ export default function ArcSelect() {
                 <button
                   key={arc.id}
                   onClick={() => handleSelect(arc.id)}
-                  className="relative overflow-hidden text-left group active:scale-[0.97] transition-transform duration-150"
+                  className="relative overflow-hidden text-left group press-card"
                   style={{ aspectRatio: '3/4' }}
                 >
                   {/* Panel background */}
@@ -103,7 +103,7 @@ export default function ArcSelect() {
                     >
                       {arc.label}
                     </p>
-                    <p className="text-paper/40 text-[10px] font-heading tracking-wider mt-0.5">
+                    <p className="text-paper/45 text-[10px] font-heading font-semibold tracking-wider mt-0.5 label-clear">
                       {arc.subtitle}
                     </p>
                   </div>
@@ -143,7 +143,7 @@ export default function ArcSelect() {
           <div className="px-5 pb-10">
             <button
               onClick={handleContinue}
-              className="w-full text-left active:scale-[0.98] transition-transform duration-150"
+              className="w-full text-left press-card"
             >
               <PanelCard
                 tint={ARCS[activeArcId].tint}

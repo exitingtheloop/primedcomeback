@@ -24,6 +24,7 @@ export default function Tasks() {
 
   const { tasks, allDone } = entry;
   const completedCount = tasks.filter((t) => t.completed).length;
+  const pct = Math.round((completedCount / 3) * 100);
 
   return (
     <div className="px-5 pt-8 pb-4 relative">
@@ -31,7 +32,7 @@ export default function Tasks() {
       <div className="mb-2">
         <div className="flex items-center gap-2 mb-1">
           <div className="h-[2px] w-5" style={{ backgroundColor: arc.tint, opacity: 0.5 }} />
-          <span className="text-[10px] tracking-[0.3em] uppercase opacity-35 font-heading">
+          <span className="text-[10px] tracking-[0.3em] uppercase opacity-45 font-heading font-semibold label-clear">
             DAY {dayNumber} &middot; {arc.label}
           </span>
         </div>
@@ -40,9 +41,20 @@ export default function Tasks() {
         </h1>
       </div>
 
-      {/* Progress count */}
-      <div className="flex items-center gap-3 mb-6 mt-3">
-        <div className="flex gap-1.5">
+      {/* Progress section */}
+      <div className="mb-6 mt-3">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[11px] font-heading font-semibold tracking-[0.15em] uppercase label-clear" style={{ color: arc.tint }}>
+            {completedCount}/3 COMPLETED
+          </span>
+          {allDone && (
+            <span className="text-[10px] font-heading font-bold tracking-[0.1em] uppercase label-clear" style={{ color: arc.tint }}>
+              ✓ ALL DONE
+            </span>
+          )}
+        </div>
+        {/* Segment dots */}
+        <div className="flex gap-1.5 mt-2">
           {[0, 1, 2].map((i) => (
             <div
               key={i}
@@ -53,9 +65,6 @@ export default function Tasks() {
             />
           ))}
         </div>
-        <span className="text-[10px] opacity-25 tracking-wider font-heading">
-          {completedCount}/3
-        </span>
       </div>
 
       {/* Task Cards */}
@@ -64,42 +73,42 @@ export default function Tasks() {
           <button
             key={task.templateId}
             onClick={() => toggleTask(today, i)}
-            className="w-full text-left active:scale-[0.98] transition-transform duration-100"
+            className="w-full text-left press-card"
           >
             <PanelCard
               tint={arc.tint}
-              tintOpacity={task.completed ? 0.04 : 0.1}
-              className={`transition-all duration-300 ${task.completed ? 'opacity-45' : ''}`}
+              tintOpacity={task.completed ? 0.03 : 0.1}
+              className={`transition-all duration-300 ${task.completed ? 'opacity-50' : ''}`}
             >
               <div className="flex items-stretch">
                 {/* Left accent bar */}
                 <div
                   className="w-1 flex-shrink-0 transition-all duration-300"
                   style={{
-                    backgroundColor: task.completed ? 'rgba(232,224,212,0.05)' : arc.tint,
+                    backgroundColor: task.completed ? 'rgba(232,224,212,0.04)' : arc.tint,
                   }}
                 />
 
                 <div className="flex-1 p-4 pl-5 flex items-center gap-4">
-                  {/* Checkbox */}
+                  {/* Checkbox — animated */}
                   <div
-                    className="w-8 h-8 flex items-center justify-center flex-shrink-0 transition-all duration-200"
+                    className="w-8 h-8 flex items-center justify-center flex-shrink-0 transition-colors duration-200"
                     style={{
                       border: task.completed
                         ? 'none'
-                        : '2px solid rgba(232,224,212,0.15)',
+                        : '2px solid rgba(232,224,212,0.18)',
                       backgroundColor: task.completed ? arc.tint : 'transparent',
                     }}
                   >
                     {task.completed && (
-                      <span className="text-ink text-sm font-bold">&#10003;</span>
+                      <span className="text-ink text-sm font-bold check-pop">✓</span>
                     )}
                   </div>
 
                   {/* Task Info */}
                   <div className="flex-1 min-w-0">
                     <p
-                      className={`font-heading text-base tracking-[0.04em] leading-tight ${
+                      className={`font-heading text-[15px] font-semibold tracking-[0.03em] leading-tight ${
                         task.completed ? 'line-through opacity-50' : ''
                       }`}
                     >
@@ -108,7 +117,7 @@ export default function Tasks() {
                     <div className="flex items-center gap-2 mt-2">
                       {/* Stat badge */}
                       <span
-                        className="text-[9px] uppercase tracking-[0.12em] font-heading font-bold px-2 py-0.5"
+                        className="text-[9px] uppercase tracking-[0.12em] font-heading font-bold px-2 py-0.5 label-clear"
                         style={{
                           backgroundColor: `${arc.tint}18`,
                           color: arc.tint,
@@ -117,7 +126,7 @@ export default function Tasks() {
                       >
                         {STAT_LABELS[task.stat]}
                       </span>
-                      <span className="text-[10px] opacity-25 tracking-wider font-heading">
+                      <span className="text-[10px] opacity-30 tracking-wider font-heading font-medium label-clear">
                         +{task.xp} XP
                       </span>
                     </div>
@@ -129,25 +138,34 @@ export default function Tasks() {
         ))}
       </div>
 
-      {/* All Done State */}
+      {/* ── All Done State — big "DONE" banner ───────────────── */}
       {allDone && (
         <div className="mt-10 text-center relative">
+          {/* Background glow */}
+          <div
+            className="absolute inset-0 -inset-x-8 -inset-y-4 opacity-10 blur-2xl"
+            style={{ backgroundColor: arc.tint }}
+          />
+
           {/* Stamp */}
-          <div className="inline-block relative">
+          <div className="inline-block relative stamp-slam">
             <div
-              className="rotate-[-6deg] border-[3px] px-10 py-3"
+              className="border-[3px] px-12 py-4"
               style={{ borderColor: arc.tint, color: arc.tint }}
             >
-              <p className="font-heading text-4xl font-bold tracking-[0.15em]">
-                COMPLETED!
+              <p className="font-heading text-5xl font-bold tracking-[0.18em]">
+                DONE
               </p>
             </div>
           </div>
-          <p className="text-paper/30 text-xs mt-6 tracking-wider font-heading">
+          <p
+            className="text-xs mt-6 tracking-wider font-heading font-semibold label-clear"
+            style={{ color: `${arc.tint}90` }}
+          >
             +10 BONUS XP EARNED (DISCIPLINE)
           </p>
-          <p className="text-paper/15 text-[10px] mt-1.5 tracking-wider">
-            All tasks cleared. Come back tomorrow for new challenges.
+          <p className="text-paper/20 text-[10px] mt-2 tracking-wider label-clear">
+            All tasks cleared. Come back tomorrow.
           </p>
         </div>
       )}

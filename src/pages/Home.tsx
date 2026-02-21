@@ -31,20 +31,12 @@ export default function Home() {
   const tasksCompleted = 3 - tasksRemaining;
   const allDone = todayEntry?.allDone ?? false;
 
-  const challengeText = tasksRemaining === 0
-    ? 'ALL CHALLENGES DONE'
-    : tasksRemaining === 1
-      ? 'ONE CHALLENGE LEFT'
-      : tasksRemaining === 2
-        ? 'TWO CHALLENGES LEFT'
-        : 'THREE CHALLENGES LEFT';
-
   return (
     <div className="px-5 pt-8 pb-4">
       {/* Header: "CURRENTLY ON YOUR [ARC]" + DAY tag */}
       <div className="flex items-start justify-between mb-6">
         <div className="flex-1 min-w-0">
-          <p className="text-[10px] tracking-[0.3em] uppercase opacity-35 font-heading mb-1">
+          <p className="text-[10px] tracking-[0.3em] uppercase opacity-45 font-heading font-semibold mb-1 label-clear">
             CURRENTLY ON YOUR
           </p>
           <h1
@@ -62,7 +54,7 @@ export default function Home() {
           }}
         >
           <span
-            className="font-heading text-xs font-bold tracking-[0.15em]"
+            className="font-heading text-xs font-bold tracking-[0.15em] label-clear"
             style={{ color: arc.tint }}
           >
             DAY {dayNumber}
@@ -74,15 +66,15 @@ export default function Home() {
       <div className="grid grid-cols-3 gap-2 mb-5">
         <PanelCard tint={arc.tint} tintOpacity={0.06} className="p-3 text-center">
           <p className="font-heading text-xl font-bold leading-none">{streak}</p>
-          <p className="text-[8px] uppercase tracking-[0.15em] opacity-25 mt-1 font-heading">Streak</p>
+          <p className="text-[9px] uppercase tracking-[0.12em] opacity-35 mt-1 font-heading font-semibold label-clear">Streak</p>
         </PanelCard>
         <PanelCard tint={arc.tint} tintOpacity={0.06} className="p-3 text-center">
           <p className="font-heading text-xl font-bold leading-none" style={{ color: arc.tint }}>LV.{overallLevel}</p>
-          <p className="text-[8px] uppercase tracking-[0.15em] opacity-25 mt-1 font-heading">Level</p>
+          <p className="text-[9px] uppercase tracking-[0.12em] opacity-35 mt-1 font-heading font-semibold label-clear">Level</p>
         </PanelCard>
         <PanelCard tint={arc.tint} tintOpacity={0.06} className="p-3 text-center">
           <p className="font-heading text-xl font-bold leading-none">{totalXP}</p>
-          <p className="text-[8px] uppercase tracking-[0.15em] opacity-25 mt-1 font-heading">Total XP</p>
+          <p className="text-[9px] uppercase tracking-[0.12em] opacity-35 mt-1 font-heading font-semibold label-clear">Total XP</p>
         </PanelCard>
       </div>
 
@@ -95,7 +87,7 @@ export default function Home() {
             style={{ backgroundColor: arc.tint, opacity: 0.4 }}
           />
           <span
-            className="text-[11px] font-heading tracking-[0.25em] uppercase font-bold"
+            className="text-[11px] font-heading tracking-[0.25em] uppercase font-bold label-clear"
             style={{ color: arc.tint }}
           >
             CHAPTER {dayNumber}
@@ -106,7 +98,7 @@ export default function Home() {
         <h2 className="font-heading text-3xl font-bold leading-[1.05] tracking-[0.02em] text-paper mb-1">
           {arc.subtitle}
         </h2>
-        <p className="text-paper/25 text-xs mb-6 tracking-wider">
+        <p className="text-paper/30 text-xs mb-6 tracking-wider label-clear">
           {arc.description.slice(0, 80)}...
         </p>
 
@@ -118,19 +110,24 @@ export default function Home() {
                 className="font-heading text-2xl font-bold tracking-[0.1em]"
                 style={{ color: arc.tint }}
               >
-                &#10003; CHAPTER CLEARED
+                ✓ CHAPTER CLEARED
               </span>
             </div>
           ) : (
             <>
-              <p className="font-heading text-xl font-bold tracking-[0.05em] text-paper leading-none">
-                {challengeText}
-              </p>
-              <p className="text-paper/25 text-[11px] tracking-[0.1em] uppercase font-heading mt-1.5">
+              <div className="flex items-baseline justify-between">
+                <p className="font-heading text-lg font-bold tracking-[0.05em] text-paper leading-none">
+                  {tasksRemaining} task{tasksRemaining !== 1 ? 's' : ''} remaining
+                </p>
+                <span className="text-[10px] font-heading font-semibold tracking-[0.1em] label-clear" style={{ color: arc.tint }}>
+                  {tasksCompleted}/3
+                </span>
+              </div>
+              <p className="text-paper/30 text-[11px] tracking-[0.1em] uppercase font-heading mt-1 label-clear">
                 TO COMPLETE THIS CHAPTER
               </p>
 
-              {/* Progress dots */}
+              {/* Segment dots */}
               <div className="flex gap-2 mt-4">
                 {[0, 1, 2].map((i) => (
                   <div
@@ -148,16 +145,28 @@ export default function Home() {
         </div>
       </PanelCard>
 
-      {/* Tasks Remaining Bar */}
+      {/* Tasks Remaining Bar — live update */}
       <PanelCard tint={arc.tint} tintOpacity={0.05} className="px-5 py-4 mb-4">
         <div className="flex items-center justify-between">
-          <div>
+          <div className="flex items-baseline gap-2">
             <span className="font-heading text-2xl font-bold leading-none">
               {tasksRemaining}
             </span>
-            <span className="text-paper/30 text-xs ml-2 tracking-[0.1em] uppercase font-heading">
-              TASKS REMAINING FOR TODAY
+            <span className="text-paper/35 text-xs tracking-[0.1em] uppercase font-heading font-semibold label-clear">
+              {tasksRemaining === 3 ? 'TASKS REMAINING TODAY' : tasksRemaining === 0 ? 'ALL TASKS DONE!' : `TASK${tasksRemaining > 1 ? 'S' : ''} LEFT TODAY`}
             </span>
+          </div>
+          {/* Mini progress */}
+          <div className="flex gap-1">
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                className="w-2 h-2 rounded-sm transition-all duration-300"
+                style={{
+                  backgroundColor: i < tasksCompleted ? arc.tint : 'rgba(232,224,212,0.08)',
+                }}
+              />
+            ))}
           </div>
         </div>
       </PanelCard>
@@ -165,19 +174,28 @@ export default function Home() {
       {/* CTA Button */}
       <button
         onClick={() => navigate('/tasks')}
-        className="w-full py-4 font-heading text-base tracking-[0.2em] uppercase font-bold transition-all duration-200 active:scale-[0.98]"
+        className="w-full py-4 font-heading text-base tracking-[0.2em] uppercase font-bold transition-all duration-200 press-card"
         style={{
           backgroundColor: allDone ? 'transparent' : arc.tint,
           color: allDone ? arc.tint : '#0a0a0a',
           border: allDone ? `2px solid ${arc.tint}` : '2px solid transparent',
         }}
       >
-        {allDone ? '\u2713 DAY COMPLETE' : 'BEGIN TASKS \u2192'}
+        {allDone ? '✓ DAY COMPLETE' : 'BEGIN TASKS →'}
+      </button>
+
+      {/* Journey link */}
+      <button
+        onClick={() => navigate('/journey')}
+        className="w-full mt-3 py-3 font-heading text-xs tracking-[0.2em] uppercase text-paper/30 hover:text-paper/45 transition-colors duration-200 press-card label-clear"
+        style={{ border: '1px solid rgba(232,224,212,0.06)' }}
+      >
+        VIEW JOURNEY · CHAPTER {dayNumber}
       </button>
 
       {/* Today's missions preview */}
       <div className="mt-6 pt-5" style={{ borderTop: '1px solid rgba(232,224,212,0.04)' }}>
-        <p className="text-[10px] tracking-[0.3em] uppercase opacity-20 font-heading mb-3">
+        <p className="text-[10px] tracking-[0.3em] uppercase opacity-25 font-heading font-semibold mb-3 label-clear">
           TODAY'S MISSIONS
         </p>
         {todayEntry?.tasks.map((task, i) => (
@@ -187,24 +205,24 @@ export default function Home() {
             style={{ borderBottom: '1px solid rgba(232,224,212,0.03)' }}
           >
             <div
-              className="w-5 h-5 rounded-sm flex items-center justify-center flex-shrink-0"
+              className="w-5 h-5 rounded-sm flex items-center justify-center flex-shrink-0 transition-colors duration-200"
               style={{
-                border: task.completed ? 'none' : '1.5px solid rgba(232,224,212,0.12)',
+                border: task.completed ? 'none' : '1.5px solid rgba(232,224,212,0.15)',
                 backgroundColor: task.completed ? arc.tint : 'transparent',
               }}
             >
               {task.completed && (
-                <span className="text-ink text-[10px] font-bold">&#10003;</span>
+                <span className="text-ink text-[10px] font-bold check-pop">✓</span>
               )}
             </div>
             <span
-              className={`text-sm font-heading tracking-wide ${
-                task.completed ? 'opacity-25 line-through' : 'opacity-50'
+              className={`text-sm font-heading font-medium tracking-wide ${
+                task.completed ? 'opacity-25 line-through' : 'opacity-55'
               }`}
             >
               {task.title}
             </span>
-            <span className="text-[9px] opacity-15 ml-auto tracking-wider whitespace-nowrap">
+            <span className="text-[9px] opacity-20 ml-auto tracking-wider whitespace-nowrap font-heading font-medium label-clear">
               +{task.xp} XP
             </span>
           </div>

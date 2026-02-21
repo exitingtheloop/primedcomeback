@@ -116,6 +116,16 @@ export default function Codex() {
         style={{ borderTop: '1px solid rgba(232,224,212,0.06)' }}
       >
         <button
+          onClick={() => navigate('/journey')}
+          className="w-full py-3.5 mb-3 font-heading text-xs tracking-[0.25em] uppercase transition-colors duration-200"
+          style={{
+            border: `1px solid ${arc.tint}30`,
+            color: arc.tint,
+          }}
+        >
+          VIEW FULL JOURNEY
+        </button>
+        <button
           onClick={handleSwitchArc}
           className="w-full py-3.5 font-heading text-xs tracking-[0.25em] uppercase text-paper/30 hover:text-paper/50 transition-colors duration-200"
           style={{

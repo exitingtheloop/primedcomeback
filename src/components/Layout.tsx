@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
 import { ARC_THEMES } from '../data/themes';
 import BottomNav from './BottomNav';
@@ -10,6 +10,7 @@ import {
 } from './Overlays';
 
 export default function Layout() {
+  const location = useLocation();
   const activeArcId = useAppStore((s) => s.activeArcId);
   const theme = activeArcId ? ARC_THEMES[activeArcId] : null;
 
@@ -25,7 +26,9 @@ export default function Layout() {
 
       {/* Scrollable content area */}
       <main className="flex-1 pb-24 overflow-y-auto relative">
-        <Outlet />
+        <div key={location.pathname} className="page-transition">
+          <Outlet />
+        </div>
       </main>
 
       {/* Bottom navigation */}

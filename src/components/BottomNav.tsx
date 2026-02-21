@@ -14,13 +14,12 @@ const TABS = [
     ),
   },
   {
-    path: '/journey',
-    label: 'Journey',
+    path: '/tasks',
+    label: 'Tasks',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
-        <line x1="9" y1="3" x2="9" y2="18" />
-        <line x1="15" y1="6" x2="15" y2="21" />
+        <path d="M9 11l3 3L22 4" />
+        <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
       </svg>
     ),
   },
@@ -63,9 +62,7 @@ export default function BottomNav() {
     >
       <div className="flex items-center justify-around h-16">
         {TABS.map((tab) => {
-          const isActive =
-            location.pathname === tab.path ||
-            (tab.path === '/home' && location.pathname === '/tasks');
+          const isActive = location.pathname === tab.path;
           return (
             <button
               key={tab.path}
@@ -76,7 +73,7 @@ export default function BottomNav() {
               }}
             >
               {tab.icon}
-              <span className="text-[10px] font-heading tracking-[0.12em] uppercase">
+              <span className="text-[10px] font-heading tracking-[0.12em] uppercase font-semibold label-clear">
                 {tab.label}
               </span>
             </button>

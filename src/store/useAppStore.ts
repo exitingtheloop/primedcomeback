@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { useEffect, useState } from 'react';
 import { ArcId, StatKey, ARCS } from '../data/arcs';
 import { hashCode, seededShuffle } from '../utils/seed';
 
@@ -156,3 +157,18 @@ export const useAppStore = create<AppState & AppActions>()(
     }
   )
 );
+
+/**
+ * Hook to track whether the Zustand store has finished rehydrating from localStorage.
+ * Prevents flash-redirect when protected routes render before state is available.
+ */
+export function useHydration(): boolean {
+  const [hydrated, setHydrated] = useState(useAppStore.persist.hasHydrated());
+
+  useEffect(() => {
+    const unsub = useAppStore.persist.onFinishHydration(() => setHydrated(true));
+    return unsub;
+  }, []);
+
+  return hydrated;
+}

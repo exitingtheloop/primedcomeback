@@ -60,7 +60,7 @@ export default function PanelCard({
 
   return (
     <div
-      className={`relative overflow-hidden ${className}`}
+      className={`relative overflow-hidden panel-card ${onClick ? 'press-card cursor-pointer' : ''} ${className}`}
       onClick={onClick}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}

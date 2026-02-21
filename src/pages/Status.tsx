@@ -50,7 +50,7 @@ export default function Status() {
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-1">
           <div className="h-[2px] w-5" style={{ backgroundColor: arc.tint, opacity: 0.5 }} />
-          <span className="text-[10px] tracking-[0.3em] uppercase opacity-35 font-heading">
+          <span className="text-[10px] tracking-[0.3em] uppercase opacity-45 font-heading font-semibold label-clear">
             {arc.label} ARC
           </span>
         </div>
@@ -101,10 +101,10 @@ export default function Status() {
                 />
               </div>
               <div className="flex items-center justify-between mt-2">
-                <span className="text-[10px] opacity-25 tracking-wider font-heading">
+                <span className="text-[10px] opacity-30 tracking-wider font-heading font-medium label-clear">
                   {xp} XP
                 </span>
-                <span className="text-[10px] opacity-20 tracking-wider">
+                <span className="text-[10px] opacity-30 tracking-wider font-heading font-medium label-clear">
                   {xpInLevel}/100 to next
                 </span>
               </div>
