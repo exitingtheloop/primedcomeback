@@ -1,24 +1,27 @@
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
-import { ARCS, ArcId } from '../data/arcs';
+import { ARCS, ArcId, ARC_LOCKED_IMAGE } from '../data/arcs';
 import { getDayNumber } from '../utils/seed';
-import { GrainOverlay, ScanlineOverlay, VignetteOverlay, HalftoneOverlay, InkBleedOverlay } from '../components/Overlays';
+import { GrainOverlay, ScanlineOverlay, VignetteOverlay, InkBleedOverlay } from '../components/Overlays';
 import { ARC_THEMES } from '../data/themes';
 import PanelCard from '../components/PanelCard';
 
 const ARC_ORDER: ArcId[] = ['redemption', 'genius', 'winter'];
 
 /** SVG-based abstract background per arc for the thumbnail grid */
-function ArcThumbnailBg({ tint }: { tint: string }) {
+function ArcThumbnailBg({ tint, image }: { tint: string; image: string }) {
   return (
     <div className="absolute inset-0">
-      {/* Diagonal slash pattern */}
-      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <rect width="100" height="100" fill={tint} opacity="0.15" />
-        <polygon points="0,100 60,0 100,0 100,100" fill={tint} opacity="0.08" />
-        <polygon points="0,100 0,40 30,0 50,0" fill="white" opacity="0.03" />
-      </svg>
-      <HalftoneOverlay density="dense" />
+      <img
+        src={image}
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+      />
+      {/* Tinted overlay to unify with arc color */}
+      <div
+        className="absolute inset-0"
+        style={{ backgroundColor: tint, opacity: 0.08 }}
+      />
       <ScanlineOverlay weight="normal" />
     </div>
   );
@@ -80,12 +83,18 @@ export default function ArcSelect() {
                 <button
                   key={arc.id}
                   onClick={() => handleSelect(arc.id)}
-                  className="relative overflow-hidden text-left group press-card"
+                  className="relative overflow-hidden text-left group press-card transition-all duration-300 hover:brightness-110"
                   style={{ aspectRatio: '3/4' }}
                 >
                   {/* Panel background */}
                   <div className="absolute inset-0 bg-paper-dark" />
-                  <ArcThumbnailBg tint={arc.tint} />
+                  <ArcThumbnailBg tint={arc.tint} image={arc.image} />
+
+                  {/* Hover glow border */}
+                  <div
+                    className="absolute inset-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                    style={{ boxShadow: `inset 0 0 0 2px ${arc.tint}60, 0 0 20px ${arc.tint}15` }}
+                  />
 
                   {/* Active ring */}
                   {isActive && (
@@ -98,7 +107,7 @@ export default function ArcSelect() {
                   {/* Content overlay at bottom */}
                   <div className="absolute inset-x-0 bottom-0 z-10 p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
                     <p
-                      className="font-heading text-xl font-bold tracking-[0.06em] leading-none text-shadow-md"
+                      className="font-heading text-xl font-bold tracking-[0.06em] leading-none text-shadow-md transition-transform duration-300 group-hover:translate-x-0.5"
                       style={{ color: arc.tint }}
                     >
                       {arc.label}
@@ -116,10 +125,14 @@ export default function ArcSelect() {
               className="relative overflow-hidden bg-paper-dark flex items-center justify-center"
               style={{ aspectRatio: '3/4' }}
             >
-              <div className="absolute inset-0 bg-paper/[0.02]" />
-              <div className="text-center">
-                <span className="text-paper/10 text-3xl">&#128274;</span>
-                <p className="text-paper/10 text-[9px] font-heading tracking-widest mt-1 uppercase">
+              <img
+                src={ARC_LOCKED_IMAGE}
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover opacity-30"
+              />
+              <div className="absolute inset-0 bg-black/25" />
+              <div className="text-center relative z-10">
+                <p className="text-paper/50 text-[9px] font-heading tracking-widest mt-1 uppercase">
                   Locked
                 </p>
               </div>

@@ -14,6 +14,7 @@ export interface Arc {
   subtitle: string;
   description: string;
   tint: string;
+  image: string;
   taskPool: TaskTemplate[];
 }
 
@@ -22,8 +23,9 @@ export const ARCS: Record<ArcId, Arc> = {
     id: 'redemption',
     label: 'REDEMPTION',
     subtitle: 'Rise From The Ashes',
+    image: '/images/arcs/ARC_REDEMPTION.png',
     description:
-      'The path of discipline and rebirth. Every fall is a lesson, every bruise a badge. You don\'t crawl back—you climb. Forge yourself through fire and silence the doubters with results.',
+      'The path of discipline and rebirth. Every fall is a lesson, every bruise a badge. You don\'t crawl back -- you climb. Forge yourself through fire and silence the doubters with results.',
     tint: '#dc2626',
     taskPool: [
       { id: 'r-1', title: 'Wake before 6:00 AM', stat: 'discipline', xp: 10 },
@@ -44,8 +46,9 @@ export const ARCS: Record<ArcId, Arc> = {
     id: 'genius',
     label: 'GENIUS',
     subtitle: 'Unlock Your Mind',
+    image: '/images/arcs/ARC_GENIUS.png',
     description:
-      'The path of knowledge and mastery. Your mind is the sharpest weapon you own. Feed it problems, starve it distractions. Genius isn\'t born—it\'s built in the hours nobody sees.',
+      'The path of knowledge and mastery. Your mind is the sharpest weapon you own. Feed it problems, starve it distractions. Genius isn\'t born -- it\'s built in the hours nobody sees.',
     tint: '#06b6d4',
     taskPool: [
       { id: 'g-1', title: 'Deep focus session (1 hr)', stat: 'discipline', xp: 10 },
@@ -66,6 +69,7 @@ export const ARCS: Record<ArcId, Arc> = {
     id: 'winter',
     label: 'WINTER',
     subtitle: 'Endure The Cold',
+    image: '/images/arcs/ARC_WINTER.png',
     description:
       'The path of resilience and endurance. When the world freezes over, you keep moving. Comfort is the enemy. The cold strips away weakness and leaves only what\'s unbreakable.',
     tint: '#60a5fa',
@@ -94,10 +98,33 @@ export const STAT_LABELS: Record<StatKey, string> = {
 };
 
 export const STAT_ICONS: Record<StatKey, string> = {
-  discipline: '⚡',
-  physicality: '💪',
-  wisdom: '📖',
-  intellect: '🧠',
+  discipline: '[D]',
+  physicality: '[P]',
+  wisdom: '[W]',
+  intellect: '[I]',
 };
 
 export const ALL_STATS: StatKey[] = ['discipline', 'physicality', 'wisdom', 'intellect'];
+
+export const ARC_LOCKED_IMAGE = '/images/arcs/ARC_LOCKED.png';
+
+/** Chapter images per arc — alternates between 2 images based on day number */
+export const CHAPTER_IMAGES: Record<ArcId, [string, string]> = {
+  redemption: [
+    '/images/chapters/redemption_chapter1.png',
+    '/images/chapters/redemption_chapter2.png',
+  ],
+  genius: [
+    '/images/chapters/genius_chapter1.png',
+    '/images/chapters/genius_chapter2.png',
+  ],
+  winter: [
+    '/images/chapters/winter_chapter1.png',
+    '/images/chapters/winter_chapter2.png',
+  ],
+};
+
+/** Get chapter image for a given arc + day number (alternates between 2) */
+export function getChapterImage(arcId: ArcId, dayNum: number): string {
+  return CHAPTER_IMAGES[arcId][dayNum % 2];
+}

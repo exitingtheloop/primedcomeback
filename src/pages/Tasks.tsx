@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
 import { ARCS, STAT_LABELS } from '../data/arcs';
 import { getTodayKey, getDayNumber } from '../utils/seed';
 import PanelCard from '../components/PanelCard';
 
 export default function Tasks() {
+  const navigate = useNavigate();
   const activeArcId = useAppStore((s) => s.activeArcId);
   const startedAtDate = useAppStore((s) => s.startedAtDate);
   const daily = useAppStore((s) => s.daily);
@@ -49,7 +51,7 @@ export default function Tasks() {
           </span>
           {allDone && (
             <span className="text-[10px] font-heading font-bold tracking-[0.1em] uppercase label-clear" style={{ color: arc.tint }}>
-              ✓ ALL DONE
+              X ALL DONE
             </span>
           )}
         </div>
@@ -101,7 +103,7 @@ export default function Tasks() {
                     }}
                   >
                     {task.completed && (
-                      <span className="text-ink text-sm font-bold check-pop">✓</span>
+                      <span className="text-ink text-sm font-bold check-pop">X</span>
                     )}
                   </div>
 
@@ -143,12 +145,12 @@ export default function Tasks() {
         <div className="mt-10 text-center relative">
           {/* Background glow */}
           <div
-            className="absolute inset-0 -inset-x-8 -inset-y-4 opacity-10 blur-2xl"
+            className="absolute inset-0 -inset-x-8 -inset-y-4 opacity-10 blur-2xl pointer-events-none"
             style={{ backgroundColor: arc.tint }}
           />
 
           {/* Stamp */}
-          <div className="inline-block relative stamp-slam">
+          <div className="inline-block relative stamp-slam pointer-events-none">
             <div
               className="border-[3px] px-12 py-4"
               style={{ borderColor: arc.tint, color: arc.tint }}
@@ -167,6 +169,28 @@ export default function Tasks() {
           <p className="text-paper/20 text-[10px] mt-2 tracking-wider label-clear">
             All tasks cleared. Come back tomorrow.
           </p>
+
+          {/* Navigation out of done state */}
+          <div className="flex gap-2 mt-8 justify-center relative z-10">
+            <button
+              onClick={() => navigate('/home')}
+              className="px-6 py-3 font-heading text-xs tracking-[0.15em] uppercase font-semibold text-paper/30 hover:text-paper/45 press-card label-clear"
+              style={{ border: '1px solid rgba(232,224,212,0.06)' }}
+            >
+              ← HOME
+            </button>
+            <button
+              onClick={() => navigate('/status')}
+              className="px-6 py-3 font-heading text-xs tracking-[0.15em] uppercase font-semibold press-card label-clear"
+              style={{
+                backgroundColor: `${arc.tint}15`,
+                border: `1px solid ${arc.tint}30`,
+                color: arc.tint,
+              }}
+            >
+              VIEW STATUS →
+            </button>
+          </div>
         </div>
       )}
     </div>

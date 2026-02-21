@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
-import { ARCS } from '../data/arcs';
+import { ARCS, getChapterImage } from '../data/arcs';
 import { getTodayKey, getDayNumber, getLevel } from '../utils/seed';
 import PanelCard from '../components/PanelCard';
 
@@ -79,7 +79,7 @@ export default function Home() {
       </div>
 
       {/* Big Chapter Card */}
-      <PanelCard tint={arc.tint} tintOpacity={0.15} className="p-6 mb-5">
+      <PanelCard tint={arc.tint} tintOpacity={0.15} bgImageUrl={getChapterImage(activeArcId!, dayNumber)} className="p-6 mb-5">
         {/* Chapter label */}
         <div className="flex items-center gap-2 mb-4">
           <div
@@ -98,7 +98,7 @@ export default function Home() {
         <h2 className="font-heading text-3xl font-bold leading-[1.05] tracking-[0.02em] text-paper mb-1">
           {arc.subtitle}
         </h2>
-        <p className="text-paper/30 text-xs mb-6 tracking-wider label-clear">
+        <p className="text-paper/50 text-xs mb-6 tracking-wider label-clear">
           {arc.description.slice(0, 80)}...
         </p>
 
@@ -110,7 +110,7 @@ export default function Home() {
                 className="font-heading text-2xl font-bold tracking-[0.1em]"
                 style={{ color: arc.tint }}
               >
-                ✓ CHAPTER CLEARED
+                X CHAPTER CLEARED
               </span>
             </div>
           ) : (
@@ -172,26 +172,65 @@ export default function Home() {
       </PanelCard>
 
       {/* CTA Button */}
-      <button
-        onClick={() => navigate('/tasks')}
-        className="w-full py-4 font-heading text-base tracking-[0.2em] uppercase font-bold transition-all duration-200 press-card"
-        style={{
-          backgroundColor: allDone ? 'transparent' : arc.tint,
-          color: allDone ? arc.tint : '#0a0a0a',
-          border: allDone ? `2px solid ${arc.tint}` : '2px solid transparent',
-        }}
-      >
-        {allDone ? '✓ DAY COMPLETE' : 'BEGIN TASKS →'}
-      </button>
+      {allDone ? (
+        <>
+          {/* Static completion badge — not clickable */}
+          <div
+            className="w-full py-4 text-center font-heading text-base tracking-[0.2em] uppercase font-bold"
+            style={{
+              color: arc.tint,
+              border: `2px solid ${arc.tint}`,
+            }}
+          >
+            X DAY COMPLETE
+          </div>
 
-      {/* Journey link */}
-      <button
-        onClick={() => navigate('/journey')}
-        className="w-full mt-3 py-3 font-heading text-xs tracking-[0.2em] uppercase text-paper/30 hover:text-paper/45 transition-colors duration-200 press-card label-clear"
-        style={{ border: '1px solid rgba(232,224,212,0.06)' }}
-      >
-        VIEW JOURNEY · CHAPTER {dayNumber}
-      </button>
+          {/* Post-completion actions */}
+          <div className="grid grid-cols-2 gap-2 mt-3">
+            <button
+              onClick={() => navigate('/status')}
+              className="py-3 font-heading text-xs tracking-[0.15em] uppercase font-semibold press-card label-clear"
+              style={{
+                backgroundColor: `${arc.tint}15`,
+                border: `1px solid ${arc.tint}30`,
+                color: arc.tint,
+              }}
+            >
+              VIEW STATUS
+            </button>
+            <button
+              onClick={() => navigate('/journey')}
+              className="py-3 font-heading text-xs tracking-[0.15em] uppercase font-semibold text-paper/30 hover:text-paper/45 press-card label-clear"
+              style={{ border: '1px solid rgba(232,224,212,0.06)' }}
+            >
+              VIEW JOURNEY
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
+          <button
+            onClick={() => navigate('/tasks')}
+            className="w-full py-4 font-heading text-base tracking-[0.2em] uppercase font-bold transition-all duration-200 press-card"
+            style={{
+              backgroundColor: arc.tint,
+              color: '#0a0a0a',
+              border: '2px solid transparent',
+            }}
+          >
+            BEGIN TASKS →
+          </button>
+
+          {/* Journey link */}
+          <button
+            onClick={() => navigate('/journey')}
+            className="w-full mt-3 py-3 font-heading text-xs tracking-[0.2em] uppercase text-paper/30 hover:text-paper/45 transition-colors duration-200 press-card label-clear"
+            style={{ border: '1px solid rgba(232,224,212,0.06)' }}
+          >
+            VIEW JOURNEY · CHAPTER {dayNumber}
+          </button>
+        </>
+      )}
 
       {/* Today's missions preview */}
       <div className="mt-6 pt-5" style={{ borderTop: '1px solid rgba(232,224,212,0.04)' }}>
@@ -212,7 +251,7 @@ export default function Home() {
               }}
             >
               {task.completed && (
-                <span className="text-ink text-[10px] font-bold check-pop">✓</span>
+                <span className="text-ink text-[10px] font-bold check-pop">X</span>
               )}
             </div>
             <span

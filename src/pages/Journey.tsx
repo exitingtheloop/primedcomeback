@@ -1,5 +1,5 @@
 import { useAppStore } from '../store/useAppStore';
-import { ARCS } from '../data/arcs';
+import { ARCS, getChapterImage } from '../data/arcs';
 import { getDayNumber } from '../utils/seed';
 import PanelCard from '../components/PanelCard';
 
@@ -54,6 +54,7 @@ export default function Journey() {
             tintOpacity={
               day.isToday ? 0.18 : day.completed ? 0.08 : 0.02
             }
+            bgImageUrl={!day.isFuture ? getChapterImage(activeArcId!, day.dayNum) : undefined}
             stamp={day.completed ? 'DONE' : undefined}
             className="p-4"
           >
@@ -74,7 +75,7 @@ export default function Journey() {
                   }}
                 >
                   {day.completed ? (
-                    <span className="text-ink text-sm font-bold">✓</span>
+                    <span className="text-ink text-sm font-bold">X</span>
                   ) : (
                     <span
                       className="text-sm font-heading font-bold"
@@ -97,7 +98,7 @@ export default function Journey() {
                   >
                     CHAPTER {day.dayNum}
                   </p>
-                  <p className="text-[10px] opacity-25 mt-0.5">
+                  <p className="text-[10px] opacity-50 mt-0.5">
                     {day.dateKey}
                   </p>
                 </div>

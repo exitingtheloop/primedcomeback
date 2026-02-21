@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
 import { ARCS } from '../data/arcs';
@@ -5,6 +6,7 @@ import PanelCard from '../components/PanelCard';
 
 export default function Codex() {
   const navigate = useNavigate();
+  const [showConfirm, setShowConfirm] = useState(false);
   const activeArcId = useAppStore((s) => s.activeArcId);
   const streak = useAppStore((s) => s.streak);
   const daily = useAppStore((s) => s.daily);
@@ -19,6 +21,10 @@ export default function Codex() {
   const totalXP = Object.values(statsXP).reduce((a, b) => a + b, 0);
 
   const handleSwitchArc = () => {
+    setShowConfirm(true);
+  };
+
+  const confirmSwitch = () => {
     resetArc();
     navigate('/');
   };
@@ -96,7 +102,7 @@ export default function Codex() {
                 }}
               >
                 <span style={{ color: arc.tint }} className="text-sm">
-                  ✓
+                  X
                 </span>
                 <span className="text-sm opacity-50 font-heading tracking-wider">
                   {date}
@@ -138,6 +144,50 @@ export default function Codex() {
           Warning: switching resets all progress
         </p>
       </div>
+
+      {/* Confirmation Modal */}
+      {showConfirm && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center px-8">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/80"
+            onClick={() => setShowConfirm(false)}
+          />
+          {/* Modal */}
+          <div className="relative bg-paper-dark panel-card p-6 w-full max-w-[340px]">
+            <h3 className="font-heading text-xl font-bold tracking-[0.08em] mb-2 text-paper">
+              SWITCH ARC?
+            </h3>
+            <p className="text-paper/40 text-sm leading-relaxed mb-1">
+              All progress will be permanently lost:
+            </p>
+            <ul className="text-paper/30 text-xs mb-6 space-y-1 ml-3">
+              <li>• {streak} day streak</li>
+              <li>• {totalXP} total XP</li>
+              <li>• {completedDays.length} completed chapter{completedDays.length !== 1 ? 's' : ''}</li>
+            </ul>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowConfirm(false)}
+                className="flex-1 py-3 font-heading text-xs tracking-[0.15em] uppercase font-semibold text-paper/40 press-card"
+                style={{ border: '1px solid rgba(232,224,212,0.08)' }}
+              >
+                CANCEL
+              </button>
+              <button
+                onClick={confirmSwitch}
+                className="flex-1 py-3 font-heading text-xs tracking-[0.15em] uppercase font-bold press-card"
+                style={{
+                  backgroundColor: '#dc2626',
+                  color: '#0a0a0a',
+                }}
+              >
+                RESET &amp; SWITCH
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

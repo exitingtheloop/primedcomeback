@@ -70,10 +70,14 @@ export default function PanelCard({
 
       {/* ── Layer 2: Background image (posterized) ───────── */}
       {bgImageUrl && (
-        <div
-          className={`absolute inset-0 bg-cover bg-center ${noPosterize ? '' : 'posterize'}`}
-          style={{ backgroundImage: `url(${bgImageUrl})` }}
-        />
+        <>
+          <div
+            className={`absolute inset-0 bg-cover bg-center ${noPosterize ? '' : 'posterize'}`}
+            style={{ backgroundImage: `url(${bgImageUrl})` }}
+          />
+          {/* Dim overlay for text contrast */}
+          <div className="absolute inset-0 bg-black/90" />
+        </>
       )}
 
       {/* ── Layer 2b: Abstract SVG bg element ────────────── */}
