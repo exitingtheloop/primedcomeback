@@ -55,16 +55,21 @@ export default function ArcSelect() {
 
       {/* Content */}
       <div className="relative z-10 flex-1 flex flex-col">
-        {/* Top bar */}
-        <div className="flex items-center gap-3 px-5 pt-6 pb-4">
-          <span className="text-paper/30 text-lg">&#8592;</span>
-          <span className="font-heading text-sm tracking-[0.2em] uppercase text-paper/50">
-            GO BACK
-          </span>
-        </div>
+        {/* Top bar — only show GO BACK when user already has an active arc */}
+        {activeArcId && (
+          <button
+            onClick={handleContinue}
+            className="flex items-center gap-2 px-5 pt-6 pb-4 text-paper/40 hover:text-paper/60 transition-colors press-card self-start"
+          >
+            <span className="text-lg">&#8592;</span>
+            <span className="font-heading text-sm tracking-[0.2em] uppercase font-semibold">
+              GO BACK
+            </span>
+          </button>
+        )}
 
         {/* Title section */}
-        <div className="px-5 mb-5">
+        <div className={`px-5 mb-5 ${!activeArcId ? 'pt-8' : ''}`}>
           <h1 className="font-heading text-5xl font-bold text-paper tracking-[0.04em] text-shadow-lg leading-[0.95]">
             ARC<br />MODE
           </h1>
