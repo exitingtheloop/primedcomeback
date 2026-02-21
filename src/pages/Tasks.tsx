@@ -133,6 +133,18 @@ export default function Tasks() {
                       </span>
                     </div>
                   </div>
+
+                  {/* Earned XP indicator */}
+                  {task.completed && (
+                    <div className="flex-shrink-0 self-center pl-2">
+                      <span
+                        className="text-xs font-heading font-bold tracking-wider check-pop"
+                        style={{ color: arc.tint, opacity: 0.6 }}
+                      >
+                        +{task.xp}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             </PanelCard>

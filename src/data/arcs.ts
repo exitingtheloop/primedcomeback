@@ -126,5 +126,5 @@ export const CHAPTER_IMAGES: Record<ArcId, [string, string]> = {
 
 /** Get chapter image for a given arc + day number (alternates between 2) */
 export function getChapterImage(arcId: ArcId, dayNum: number): string {
-  return CHAPTER_IMAGES[arcId][dayNum % 2];
+  return CHAPTER_IMAGES[arcId][(dayNum - 1) % 2];
 }

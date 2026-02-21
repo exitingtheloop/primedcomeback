@@ -67,7 +67,7 @@ export default function BottomNav() {
             <button
               key={tab.path}
               onClick={() => navigate(tab.path)}
-              className="flex flex-col items-center gap-0.5 px-4 py-1.5 transition-all duration-200"
+              className="flex flex-col items-center gap-0.5 px-4 py-1.5 transition-all duration-200 relative"
               style={{
                 color: isActive ? tint : 'rgba(232, 224, 212, 0.3)',
               }}
@@ -76,6 +76,12 @@ export default function BottomNav() {
               <span className="text-[10px] font-heading tracking-[0.12em] uppercase font-semibold label-clear">
                 {tab.label}
               </span>
+              {isActive && (
+                <div
+                  className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
+                  style={{ backgroundColor: tint }}
+                />
+              )}
             </button>
           );
         })}

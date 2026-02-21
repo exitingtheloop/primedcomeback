@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
-import { ARCS } from '../data/arcs';
+import { ARCS, getChapterImage } from '../data/arcs';
+import { getDayNumber } from '../utils/seed';
 import PanelCard from '../components/PanelCard';
 
 export default function Codex() {
@@ -12,7 +13,10 @@ export default function Codex() {
   const daily = useAppStore((s) => s.daily);
   const statsXP = useAppStore((s) => s.statsXP);
   const resetArc = useAppStore((s) => s.resetArc);
+  const startedAtDate = useAppStore((s) => s.startedAtDate);
   const arc = ARCS[activeArcId!];
+  const dayNumber = getDayNumber(startedAtDate);
+  const chapterImg = getChapterImage(activeArcId!, dayNumber);
 
   const completedDays = Object.entries(daily)
     .filter(([_, entry]) => entry.allDone)
@@ -41,8 +45,8 @@ export default function Codex() {
         </h1>
       </div>
 
-      {/* Arc Lore */}
-      <PanelCard tint={arc.tint} tintOpacity={0.12} className="p-5 mb-5">
+      {/* Arc Lore — with chapter image */}
+      <PanelCard tint={arc.tint} tintOpacity={0.12} bgImageUrl={chapterImg} className="p-5 py-8 mb-5">
         <h2
           className="font-heading text-2xl font-bold tracking-[0.08em] mb-2"
           style={{ color: arc.tint }}
@@ -93,25 +97,36 @@ export default function Codex() {
           </p>
         ) : (
           <div>
-            {completedDays.map(([date]) => (
-              <div
-                key={date}
-                className="flex items-center gap-3 py-2.5"
-                style={{
-                  borderBottom: '1px solid rgba(232,224,212,0.04)',
-                }}
-              >
-                <span style={{ color: arc.tint }} className="text-sm">
-                  X
-                </span>
-                <span className="text-sm opacity-50 font-heading tracking-wider">
-                  {date}
-                </span>
-                <span className="text-[10px] opacity-20 ml-auto">
-                  +30 XP
-                </span>
-              </div>
-            ))}
+            {completedDays.map(([date]) => {
+              // Compute the chapter number from the date
+              const start = new Date(startedAtDate! + 'T00:00:00');
+              const entry = new Date(date + 'T00:00:00');
+              const chapNum = Math.max(1, Math.floor((entry.getTime() - start.getTime()) / 86400000) + 1);
+              return (
+                <div
+                  key={date}
+                  className="flex items-center gap-3 py-2.5"
+                  style={{
+                    borderBottom: '1px solid rgba(232,224,212,0.04)',
+                  }}
+                >
+                  <span style={{ color: arc.tint }} className="text-sm font-heading font-bold">
+                    X
+                  </span>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-heading font-semibold tracking-wider">
+                      Chapter {chapNum}
+                    </span>
+                    <span className="text-[10px] opacity-30 tracking-wider">
+                      {date}
+                    </span>
+                  </div>
+                  <span className="text-[10px] opacity-20 ml-auto font-heading tracking-wider">
+                    +30 XP
+                  </span>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
